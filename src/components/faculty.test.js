@@ -4,6 +4,7 @@ import { shallow, mount, configure } from 'enzyme';
 
 import Facultytimetable from './Facultytimetable';
 import Adapter from 'enzyme-adapter-react-16';
+
 configure({ adapter: new Adapter() });
 it('validates inputs of faculty', () => {
 	var wrapper = shallow(<Facultytimetable />);
