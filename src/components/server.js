@@ -1,33 +1,36 @@
-const express = require('express');
-const app = express();
+const expressi = require('express');
+const appi = expressi();
 const port = 8000;
 const mysql = require('mysql');
 var bodyParser = require('body-parser');
-app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-var mysqlConnection = mysql.createConnection({
+appi.set('view engine', 'ejs');
+appi.use(bodyParser.urlencoded({ extended: false }));
+appi.use(bodyParser.json());
+function loadpassword() {
+	return 'occupancy';
+}
+var sqlConnection = mysql.createConnection({
 	host: 'occupancychart.cmauel5myhvk.us-east-1.rds.amazonaws.com',
 	user: 'admin',
-	password: 'occupancy',
+	password: loadpassword(),
 	database: 'occupancy'
 });
 
-mysqlConnection.connect((err) => {
+sqlConnection.connect((err) => {
 	if (!err) console.log('Connection succeeded.');
 	else console.log('Unsuccessful \n Error : ' + JSON.stringify(err, undefined, 2));
 });
 
-app.post('/mytimetable', function(req, res) {
+appi.post('/mytimetable', function(req, res) {
 	var fid = req.body.fid;
 	var sem = req.body.sem;
-	console.log(fid + ' hola ' + sem);
+
 	res.writeHead(200, { 'content-type': 'text/html' });
-	mysqlConnection.query(
+	sqlConnection.query(
 		'SELECT day as day,period1 as p1,period2 as p2,period3 as p3,period4 as p4,period5 as p5,period6 as p6,period7 as p7,period8 as p8,period9 as p9 FROM occupancy.faculty where sem=? and fname=(select fname from facultyid where fid=?)',
 		[ sem, fid ],
-		function(err, result, fields) {
-			if (!err) {
+		function(erri, result, fields) {
+			if (!erri) {
 				for (let i = 0; i < result.length; i++) {
 					res.write(
 						'<!DOCTYPE html> <head></head> <body> <h1> Day : </h1> <h4>' +
@@ -58,7 +61,7 @@ app.post('/mytimetable', function(req, res) {
 	);
 });
 
-app.post('/roomfeat', function(req, res) {
+appi.post('/roomfeat', function(req, res) {
 	var prj = req.body.projector;
 	var skt = req.body.socket;
 	var ac = req.body.ac;
@@ -66,7 +69,7 @@ app.post('/roomfeat', function(req, res) {
 	var mic = req.body.mic;
 	var mb = req.body.mb;
 	res.writeHead(200, { 'content-type': 'text/html' });
-	mysqlConnection.query(
+	sqlConnection.query(
 		'select roomno as roomno from feat where projector=? and ac=? and skt=? and sb=? and mic=? and mb=?',
 		[ prj, ac, skt, sb, mic, mb ],
 		function(err, result, fields) {
@@ -88,17 +91,17 @@ app.post('/roomfeat', function(req, res) {
 	);
 });
 
-app.post('/cancelclass', function(req, res) {
+appi.post('/cancelclass', function(req, res) {
 	var sem = req.body.sem;
 	var classi = req.body.class;
 	var day = req.body.day;
 	var period = req.body.time;
 	console.log('Cancelling class ' + classi + ' ' + day + ' ' + period);
-	mysqlConnection.query(
+	sqlConnection.query(
 		'select ' + period + ' as period from studenttime where sem=? and day=? and section=?',
 		[ sem, day, classi ],
 		function(err, result, fields) {
-			mysqlConnection.query('insert into tempcancel values(?,?,?,?,?)', [
+			sqlConnection.query('insert into tempcancel values(?,?,?,?,?)', [
 				classi,
 				sem,
 				day,
@@ -112,21 +115,21 @@ app.post('/cancelclass', function(req, res) {
 	);
 });
 
-app.post('/reqroombooking', function(req, res) {
+appi.post('/reqroombooking', function(req, res) {
 	var roomno = req.body.roomno;
 	var day = req.body.day;
 	var time = req.body.time;
 	var fid = req.body.fid;
 	console.log(fid);
 	res.writeHead(200, { 'content-type': 'text/html' });
-	mysqlConnection.query('select room as room from room where ' + time + ' ="Free"', function(err, result, field) {
+	sqlConnection.query('select room as room from room where ' + time + ' ="Free"', function(err, result, field) {
 		if (result.length > 0) {
-			mysqlConnection.query(
+			sqlConnection.query(
 				'select roomno as room from temproombook where day=? and time=?',
 				[ day, time ],
 				function(kerr, kresult, kfields) {
 					if (kresult.length == 0) {
-						mysqlConnection.query(
+						sqlConnection.query(
 							'insert into temproombook values(?,?,?,?)',
 							[ roomno, day, time, fid ],
 							function(ierr, iresult, ifield) {
@@ -153,10 +156,10 @@ app.post('/reqroombooking', function(req, res) {
 	});
 });
 
-app.post('/roomtimetable', function(req, res) {
+appi.post('/roomtimetable', function(req, res) {
 	var room = req.body.roomno;
 	res.writeHead(200, { 'content-type': 'text/html' });
-	mysqlConnection.query(
+	sqlConnection.query(
 		'SELECT day as day,period1 as p1,period2 as p2,period3 as p3,period4 as p4,period5 as p5,period6 as p6,period7 as p7,period8 as p8,period9 as p9 FROM occupancy.room where room=?',
 		[ room ],
 		function(err, result, fields) {
@@ -198,16 +201,15 @@ function checkfree(period, pno) {
 
 		return str;
 	} else {
-		str = '';
 		return str;
 	}
 }
-app.post('/freeslotsfaculty', function(req, res) {
+appi.post('/freeslotsfaculty', function(req, res) {
 	var fid = req.body.fid;
 	var sem = req.body.sem;
 	console.log(fid + ' hola2 ' + sem);
 	res.writeHead(200, { 'content-type': 'text/html' });
-	mysqlConnection.query(
+	sqlConnection.query(
 		'SELECT day as day,period1 as p1,period2 as p2,period3 as p3,period4 as p4,period5 as p5,period6 as p6,period7 as p7,period8 as p8,period9 as p9 FROM occupancy.faculty where sem=? and fname=(select fname from facultyid where fid=?)',
 		[ sem, fid ],
 		function(err, result, fields) {
@@ -234,4 +236,4 @@ app.post('/freeslotsfaculty', function(req, res) {
 	);
 	console.log('hola2');
 });
-app.listen(port, () => console.log(`Example app listening on port port!`));
+appi.listen(port, () => console.log(`Example appi listening on port port!`));

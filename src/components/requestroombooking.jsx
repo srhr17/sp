@@ -3,8 +3,7 @@ import { BrowserRouter as Router, NavLink } from 'react-router-dom';
 import { MDBAnimation } from 'mdbreact';
 class requestroombooking extends Component {
 	constructor(props) {
-		super(props);
-		this.state = { facultyname: '', fid: 0 };
+		super();
 	}
 	roomfeat = (event) => {
 		window.history.pushState(null, 'roomfeat', '/roomfeat');

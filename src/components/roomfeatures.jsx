@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import Button from 'react-bootstrap/Button';
-import BootstrapSwitchButton from 'bootstrap-switch-button-react';
+
 import { BrowserRouter as Router, NavLink } from 'react-router-dom';
 class roomfeatures extends Component {
 	constructor(props) {

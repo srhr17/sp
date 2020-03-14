@@ -5,7 +5,6 @@ class Roomtimetable extends Component {
 		super();
 		this.state = {
 			roomno: '',
-	
 
 			errors: {
 				roomno: ' '
@@ -22,13 +21,13 @@ class Roomtimetable extends Component {
 	handleChange = (e) => {
 		const { name, value } = e.target;
 		let errors = this.state.errors;
+
 		switch (name) {
 			case 'roomno':
 				errors.roomno = value === ' ' ? 'Select roomno' : '';
 				break;
-
-			
-
+			case 'room':
+				break;
 			default:
 				break;
 		}
@@ -65,7 +64,12 @@ class Roomtimetable extends Component {
 						<div class="input-group-prepend">
 							<span class="input-group-text">Room Number</span>
 						</div>
-						<textarea name="roomno" onChange={this.handleChange} class="form-control" aria-label="With textarea" />
+						<textarea
+							name="roomno"
+							onChange={this.handleChange}
+							class="form-control"
+							aria-label="With textarea"
+						/>
 					</div>
 
 					<button type="submit" data-testid="submitbutton" class="btn btn-dark" style={{ marginLeft: '40%' }}>

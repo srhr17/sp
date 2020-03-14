@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { MDBAnimation } from 'mdbreact';
-import { Dropdown, MenuItem, DropdownButton } from 'react-bootstrap';
-// import { Dropdown} from 'reactstrap';
 
 class cancelclass extends Component {
 	constructor(props) {
-		super(props);
-		this.state = {};
+		super();
 	}
 
 	render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Logo from './components/Logo.png';
+
 import { BrowserRouter as Router, NavLink } from 'react-router-dom';
 import { MDBAnimation } from 'mdbreact';
 class App extends Component {
@@ -7,7 +7,6 @@ class App extends Component {
 		super(props);
 		this.state = { facultyname: 'facultyname', fid: 0 };
 	}
-
 	facultytimetable = (event) => {
 		window.history.pushState(null, 'facultytimetable', '/facultytimetable');
 		window.location.reload();
