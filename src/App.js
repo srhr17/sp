@@ -24,7 +24,6 @@ class App extends Component {
 		window.history.pushState(null, 'requestroombooking', '/requestroombooking');
 		window.location.reload();
 	};
-
 	cancelclass = (event) => {
 		window.history.pushState(null, 'cancelclass', '/cancelclass');
 		window.location.reload();
