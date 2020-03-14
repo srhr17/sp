@@ -11,7 +11,6 @@ class App extends Component {
 		window.history.pushState(null, 'facultytimetable', '/facultytimetable');
 		window.location.reload();
 	};
-
 	roomtimetable = (event) => {
 		window.history.pushState(null, 'roomtimetable', '/roomtimetable');
 		window.location.reload();
