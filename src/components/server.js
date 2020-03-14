@@ -98,8 +98,8 @@ appi.post('/cancelclass', function(req, res) {
 	var period = req.body.time;
 	console.log('Cancelling class ' + classi + ' ' + day + ' ' + period);
 	sqlConnection.query(
-		'select ' + period + ' as period from studenttime where sem=? and day=? and section=?',
-		[ sem, day, classi ],
+		'select ? as period from studenttime where sem=? and day=? and section=?',
+		[ period, sem, day, classi ],
 		function(err, result, fields) {
 			sqlConnection.query('insert into tempcancel values(?,?,?,?,?)', [
 				classi,
@@ -122,7 +122,7 @@ appi.post('/reqroombooking', function(req, res) {
 	var fid = req.body.fid;
 	console.log(fid);
 	res.writeHead(200, { 'content-type': 'text/html' });
-	sqlConnection.query('select room as room from room where ' + time + ' ="Free"', function(err, result, field) {
+	sqlConnection.query('select room as room from room where ? ="Free"', [ time ], function(err, result, field) {
 		if (result.length > 0) {
 			sqlConnection.query(
 				'select roomno as room from temproombook where day=? and time=?',
