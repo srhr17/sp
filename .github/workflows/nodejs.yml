@@ -27,5 +27,6 @@ jobs:
     - run: npm install
     - run: npm build
     - run: npm test faculty.test.js
+    - run: sonar-scanner.bat -D"sonar.projectKey=SH" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=98656ce7263dc15f939f9a17ce39ebc974ed51cd"
       env:
         CI: true
